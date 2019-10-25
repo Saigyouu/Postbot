@@ -1,5 +1,6 @@
 package listeners;
 
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -15,9 +16,12 @@ public class MessageListener extends ListenerAdapter {
         if(event.getAuthor().isBot()) return;
 
         if(event.getMessage().getContentDisplay().startsWith("!Post")) {
-            if(!textChannelList.contains(event.getChannel())) {
-                textChannelList.add(event.getChannel());
-                event.getChannel().sendMessage("Channel hinzugefügt!").queue();
+            if(event.getMember().getPermissions().contains(Permission.MANAGE_CHANNEL)) {
+                if(!textChannelList.contains(event.getChannel())) {
+                    textChannelList.add(event.getChannel());
+                    event.getChannel().sendMessage("Channel hinzugefügt!").queue();
+                    return;
+                }
             }
         }
 
